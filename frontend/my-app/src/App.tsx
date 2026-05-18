@@ -66,6 +66,11 @@ type AssistantProduct = {
   shippingInformation?: string
   returnPolicy?: string
   tags?: string[]
+  reviews?: {
+    rating?: number
+    comment?: string
+    reviewerName?: string
+  }[]
 }
 
 type ChatItem =
@@ -343,6 +348,17 @@ function AssistantContent() {
                     </div>
                     {item.product.returnPolicy ? (
                       <p className="assistant-product-secondary">Return policy: {item.product.returnPolicy}</p>
+                    ) : null}
+                    {item.product.reviews?.length ? (
+                      <div className="assistant-review-list">
+                        {item.product.reviews.slice(0, 2).map((review, reviewIndex) => (
+                          <p className="assistant-review-item" key={`${review.reviewerName ?? 'review'}-${reviewIndex}`}>
+                            <strong>{review.reviewerName ?? 'A customer'}</strong>
+                            {review.rating !== undefined ? ` rated it ${review.rating}/5` : ''}{' '}
+                            {review.comment ? `: ${review.comment}` : ''}
+                          </p>
+                        ))}
+                      </div>
                     ) : null}
                   </div>
                 </article>

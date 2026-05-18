@@ -58,6 +58,9 @@ It explores how semantic retrieval, structured metadata filtering, and conversat
 shopping_agent/
   backend/
     app.py
+    agent/
+      intent.py
+      responses.py
     tools.py
     RAG/
       embed_products.py
@@ -124,6 +127,7 @@ Product data, descriptions, and images were seeded from DummyJSON for demo purpo
 
 - `GET /products` - return the product catalog
 - `POST /products` - create a product
+- `POST /products/upload` - sync uploaded catalog data into the backend and ChromaDB
 - `GET /uploads/{filename}` - serve uploaded product images
 
 ### Chat
@@ -139,6 +143,10 @@ The backend supports:
 - exact SKU lookup
 - topic guarding for off-topic questions
 - structured responses for the frontend
+- assistant intent logic in `backend/agent/intent.py`
+- assistant response building in `backend/agent/responses.py`
+- keeping the route layer lean so assistant logic is isolated and easier to tune
+- making future prompt and token optimization work easier by separating intent checks from response shaping
 
 The RAG scripts in `backend/RAG/` can also be run separately for search and debugging.
 
@@ -160,12 +168,13 @@ The assistant panel sends messages to the backend chat endpoint and renders the 
 - Furniture items in the dataset are above the default `$100` price cap, so raise the price filter if you want to see them in the UI.
 - The repo uses a local `chroma_db/` folder for persisted vector storage.
 
-  ## Future Improvements
-  - Conversation memory
-  - Product comparison
-  - Streaming assistant responses
-  - Voice and image search
-  - Saved favorites and user account
+## Future Improvements
+
+- Conversation memory
+- Product comparison
+- Streaming assistant responses
+- Voice and image search
+- Saved favorites and user accounts
 
 ## Troubleshooting
 

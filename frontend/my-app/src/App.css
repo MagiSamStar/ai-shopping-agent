@@ -628,6 +628,23 @@ input[type='range']::-webkit-slider-thumb {
   font-size: 0.78rem;
 }
 
+.assistant-review-list {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.assistant-review-item {
+  margin: 0;
+  color: #d7d7de;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.assistant-review-item strong {
+  color: #f7f7fa;
+}
+
 .follow-up {
   margin-top: 0;
 }
