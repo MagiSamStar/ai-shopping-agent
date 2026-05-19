@@ -21,8 +21,9 @@ from backend.agent.intent import (
     is_review_query,
     parse_in_stock_only,
     parse_price_max,
-    rank_products,
+    parse_result_limit,
 )
+from backend.agent.retrieval import rank_products_bm25
 from backend.agent.responses import (
     build_chat_response,
     build_follow_up_question,
@@ -130,12 +131,14 @@ def post_chat(payload: ChatRequest):
 
     effective_price_max = payload.price_max if payload.price_max is not None else parse_price_max(query_text)
     effective_in_stock_only = payload.in_stock_only or parse_in_stock_only(query_text)
+    result_limit = parse_result_limit(query_text)
     filters = {
         "sku": payload.sku,
         "category": payload.category,
         "brand": payload.brand,
         "price_max": effective_price_max,
         "in_stock_only": effective_in_stock_only,
+        "limit": result_limit,
     }
 
     if payload.sku:
@@ -169,7 +172,7 @@ def post_chat(payload: ChatRequest):
             response_type="single",
         )
 
-    ranked_products = rank_products(
+    ranked_products = rank_products_bm25(
         products,
         query_text,
         brand=payload.brand,
@@ -179,7 +182,7 @@ def post_chat(payload: ChatRequest):
     )
 
     if is_list_query(query_text):
-        matches = [serialize_product(product) for product in ranked_products[:5]]
+        matches = [serialize_product(product) for product in ranked_products[:result_limit]]
         if matches:
             answer = build_list_answer(matches)
             follow_up_question = "Which one are you interested in knowing more about?"
@@ -200,7 +203,7 @@ def post_chat(payload: ChatRequest):
         )
 
     if not ranked_products and effective_price_max is not None:
-        ranked_products = rank_products(
+        ranked_products = rank_products_bm25(
             products,
             query_text,
             brand=payload.brand,

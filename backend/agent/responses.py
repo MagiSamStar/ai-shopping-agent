@@ -36,7 +36,7 @@ def build_follow_up_question(product: dict[str, Any]) -> str:
     title = product.get("title", "this item")
 
     if category == "beauty":
-        return f"Would you like more info on {title}, like ingredients, reviews, or similar shades?"
+        return f"Would you like more info on {title}, like reviews, or similar shades?"
     if category == "fragrances":
         return f"Would you like more info on {title}, like scent notes, longevity, or bottle size?"
     if category == "groceries":

@@ -133,7 +133,7 @@ const chat: ChatItem[] = [
   },
 ]
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000'
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8010'
 const moneyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -293,7 +293,7 @@ function AssistantContent() {
           text: data.answer ?? 'No answer returned.',
           matches: data.matches ?? [],
           recommendations: data.recommendations ?? [],
-          product: data.product ?? data.matches?.[0],
+          product: data.product,
           followUpQuestion: data.follow_up_question ?? data.followUpQuestion,
         },
       ])

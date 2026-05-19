@@ -1,6 +1,6 @@
-# AI Shopping Agent | RAG-Powered Ecommerce Assistant
+# AI Shopping Agent | BM25-Powered Ecommerce Assistant
 
-A full-stack shopping assistant demo built with FastAPI, React, Vite, and ChromaDB.
+A full-stack shopping assistant demo built with FastAPI, React, Vite, BM25 retrieval, and ChromaDB utilities.
 
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
@@ -13,7 +13,7 @@ This project combines:
 
 - a searchable product catalog
 - an AI shopping assistant
-- retrieval-backed product lookup
+- BM25 retrieval-backed product lookup
 - a responsive storefront UI for browsing products
 
 It is designed as a portfolio project that focuses on product discovery and conversational shopping.
@@ -23,20 +23,22 @@ It is designed as a portfolio project that focuses on product discovery and conv
 - Browse a product catalog in a responsive storefront
 - Filter products by category, brand, SKU, rating, price, and stock
 - Use the assistant to search for products and ask for product details
-- Store and retrieve product records with ChromaDB
+- Rank live chat product matches with BM25 lexical retrieval
+- Store and retrieve product records with ChromaDB utilities
 
 ## Why This Exists
 
 The goal of this project is to demonstrate a realistic shopping workflow with AI-assisted search.
 
-It explores how semantic retrieval, structured metadata filtering, and conversational UI can work together to support product discovery.
+It explores how BM25 lexical retrieval, structured metadata filtering, and conversational UI can work together to support product discovery.
 
 ## Tech Stack
 
 - Frontend: React, TypeScript, Vite
 - Backend: FastAPI, Python
-- Vector Search: ChromaDB
-- AI / Retrieval: OpenAI embeddings and assistant helpers
+- Product Retrieval: BM25 via `rank-bm25`
+- Vector Utilities: ChromaDB with OpenAI embeddings
+- AI / Assistant: OpenAI and assistant helpers
 - Data Source: `data/products.json`
 
 ## Features
@@ -46,6 +48,7 @@ It explores how semantic retrieval, structured metadata filtering, and conversat
 - Desktop assistant rail
 - Mobile assistant drawer
 - Backend catalog API
+- BM25 product retrieval for assistant chat
 - ChromaDB-based product ingestion and retrieval utilities
 
 ## Screenshot
@@ -60,6 +63,7 @@ shopping_agent/
     app.py
     agent/
       intent.py
+      retrieval.py
       responses.py
     tools.py
     RAG/
@@ -86,10 +90,10 @@ From the repo root:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
-uvicorn backend.app:app --reload --port 8000
+uvicorn backend.app:app --reload --port 8010
 ```
 
-The backend runs at `http://localhost:8000`.
+The backend runs at `http://localhost:8010`.
 
 ### Frontend
 
@@ -132,23 +136,24 @@ Product data, descriptions, and images were seeded from DummyJSON for demo purpo
 
 ### Chat
 
-- `POST /chat` - assistant endpoint returning structured product search responses
+- `POST /chat` - assistant endpoint returning structured product search responses ranked with BM25 retrieval
 
 ## Backend Notes
 
 The backend supports:
 
 - greeting detection
-- product search and ranking
+- BM25 product search and ranking
 - exact SKU lookup
 - topic guarding for off-topic questions
 - structured responses for the frontend
 - assistant intent logic in `backend/agent/intent.py`
+- BM25 retrieval logic in `backend/agent/retrieval.py`
 - assistant response building in `backend/agent/responses.py`
 - keeping the route layer lean so assistant logic is isolated and easier to tune
 - making future prompt and token optimization work easier by separating intent checks from response shaping
 
-The RAG scripts in `backend/RAG/` can also be run separately for search and debugging.
+The live `/chat` endpoint uses BM25 for product retrieval. The RAG scripts in `backend/RAG/` and the local `chroma_db/` folder remain available for ChromaDB ingestion, exact metadata lookup, vector search experiments, and debugging.
 
 ## Frontend Notes
 
@@ -166,7 +171,8 @@ The assistant panel sends messages to the backend chat endpoint and renders the 
 - Run the backend and frontend in separate terminals.
 - If products are not showing up, confirm the backend is running and `GET /products` returns data.
 - Furniture items in the dataset are above the default `$100` price cap, so raise the price filter if you want to see them in the UI.
-- The repo uses a local `chroma_db/` folder for persisted vector storage.
+- The chat endpoint ranks product matches with BM25 from `backend/agent/retrieval.py`.
+- The repo uses a local `chroma_db/` folder for persisted vector storage utilities.
 
 ## Future Improvements
 
@@ -180,14 +186,14 @@ The assistant panel sends messages to the backend chat endpoint and renders the 
 
 ### Products are not loading
 
-- Make sure `uvicorn backend.app:app --reload --port 8000` is running
-- Confirm `http://localhost:8000/products` returns JSON
+- Make sure `uvicorn backend.app:app --reload --port 8010` is running
+- Confirm `http://localhost:8010/products` returns JSON
 - Check the browser console for fetch errors
 
 ### Assistant button does not respond
 
 - Make sure the frontend dev server is running
-- Confirm the chat endpoint exists and the frontend is sending requests to `http://localhost:8000/chat`
+- Confirm the chat endpoint exists and the frontend is sending requests to `http://localhost:8010/chat`
 
 ### Furniture does not appear
 

@@ -116,6 +116,19 @@ def parse_in_stock_only(message: str) -> bool:
     return "in stock" in lowered or "available now" in lowered
 
 
+def parse_result_limit(message: str, default: int = 5, maximum: int = 10) -> int:
+    match = re.search(
+        r"\b(?:show|list|find|get|recommend)?\s*(\d{1,2})\s+(?:of\s+)?(?:these|this|those|items?|products?)?\b",
+        message,
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return default
+
+    requested = int(match.group(1))
+    return max(1, min(requested, maximum))
+
+
 def build_catalog_terms(products: list[dict[str, Any]]) -> set[str]:
     terms: set[str] = set()
     for product in products:
