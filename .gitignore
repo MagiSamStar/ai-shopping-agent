@@ -7,3 +7,4 @@ __pycache__/
 frontend/my-app/node_modules/
 frontend/my-app/dist/
 backend/uploads/
+ideas/
