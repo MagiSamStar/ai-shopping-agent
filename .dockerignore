@@ -1,0 +1,15 @@
+.git
+.gitignore
+.venv
+.tmp
+**/__pycache__
+**/*.pyc
+**/.env
+.env
+chroma_db
+backend/uploads
+frontend/my-app/node_modules
+frontend/my-app/dist
+ideas
+README.md
+LICENSE

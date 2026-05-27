@@ -16,4 +16,5 @@ print(len(x))
 
 x ="python"
 y=x[2:4]
-print(len(y))
+print
+

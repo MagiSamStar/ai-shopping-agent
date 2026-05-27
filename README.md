@@ -95,6 +95,19 @@ uvicorn backend.app:app --reload --port 8010
 
 The backend runs at `http://localhost:8010`.
 
+### Backend Docker
+
+Build and run the backend container from the repo root:
+
+```bash
+docker build -t shopping-agent-backend .
+docker run --env-file .env -p 8010:8010 shopping-agent-backend
+```
+
+The container exposes the FastAPI app on `http://localhost:8010`.
+
+For Render, create a Web Service from this repo using the root `Dockerfile`. Add `OPENAI_API_KEY` as a Render environment variable, and let Render provide the `PORT` value. If uploaded products or ChromaDB data need to survive redeploys, attach persistent storage for `/app/backend/uploads` and `/app/chroma_db`.
+
 ### Frontend
 
 In a second terminal:
@@ -106,6 +119,8 @@ npm run dev
 ```
 
 The frontend usually runs at `http://localhost:5173`.
+
+For Vercel, deploy `frontend/my-app` and set `VITE_API_BASE_URL` to the Render backend URL.
 
 ## Environment Variables
 
