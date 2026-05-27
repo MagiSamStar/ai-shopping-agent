@@ -18,6 +18,10 @@ This project combines:
 
 It is designed as a portfolio project that focuses on product discovery and conversational shopping.
 
+## Live Demo
+
+[Try Shopping Agent](https://shopping-agent-ai.vercel.app/)
+
 ## What It Does
 
 - Browse a product catalog in a responsive storefront
